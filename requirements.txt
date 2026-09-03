@@ -1,2 +1,6 @@
 flask
 pandas
+microanalytics
+sklearn.preprocessing
+
+scikit-learn

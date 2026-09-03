@@ -2,6 +2,7 @@
     box-sizing: border-box;
 }
 
+
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -9,33 +10,56 @@ body {
     color: #222;
 }
 
+
+/* ============================================================
+   TOP BAR
+============================================================ */
+
 .topbar {
     background-color: #1f3a5f;
     color: white;
     padding: 18px 24px;
 }
 
+
 .topbar h1 {
     margin: 0;
     font-size: 22px;
 }
+
+
+/* ============================================================
+   LAYOUT
+============================================================ */
 
 .layout {
     display: flex;
     min-height: calc(100vh - 60px);
 }
 
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
 .sidebar {
     width: 240px;
     background-color: #26466f;
     padding-top: 10px;
+    flex-shrink: 0;
 }
+
 
 .sidebar ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
+
+
+/* ============================================================
+   MENU ITEMS
+============================================================ */
 
 .menu-item {
     display: block;
@@ -44,11 +68,14 @@ body {
     cursor: pointer;
     border-left: 4px solid transparent;
     text-decoration: none;
+    font-size: 16px;
 }
+
 
 .menu-item:hover:not(.disabled) {
     background-color: #33578a;
 }
+
 
 .menu-item.active {
     background-color: #3d6aa3;
@@ -56,38 +83,44 @@ body {
     font-weight: bold;
 }
 
+
 .menu-item.disabled {
     color: #8ba0bd;
     cursor: not-allowed;
 }
 
+
+/* ============================================================
+   MAIN CONTENT
+============================================================ */
+
 .content {
     flex: 1;
     padding: 24px 32px;
+    overflow-x: auto;
 }
 
-.hidden {
-    display: none !important;
+
+.content h2 {
+    color: #1f3a5f;
 }
 
-#load-data-btn {
-    background-color: #1f3a5f;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
+
+.content h3 {
+    margin-top: 28px;
+    color: #26466f;
 }
 
-#load-data-btn:hover {
-    background-color: #26466f;
+
+.section-description {
+    color: #666;
+    margin-bottom: 20px;
 }
 
-#loading-spinner {
-    margin-top: 10px;
-    color: #555;
-}
+
+/* ============================================================
+   ERROR
+============================================================ */
 
 .error {
     margin-top: 12px;
@@ -97,15 +130,27 @@ body {
     border-radius: 4px;
 }
 
+
+/* ============================================================
+   SUMMARY TABLE
+============================================================ */
+
 .summary-table {
     margin-top: 10px;
     border-collapse: collapse;
+    background: white;
 }
 
+
 .summary-table td {
-    padding: 6px 12px;
+    padding: 8px 14px;
     border: 1px solid #ccc;
 }
+
+
+/* ============================================================
+   DATA TABLE
+============================================================ */
 
 .table-wrapper {
     overflow-x: auto;
@@ -113,7 +158,9 @@ body {
     max-height: 400px;
     overflow-y: auto;
     border: 1px solid #ddd;
+    background: white;
 }
+
 
 .data-table {
     border-collapse: collapse;
@@ -121,18 +168,134 @@ body {
     font-size: 13px;
 }
 
-.data-table th, .data-table td {
+
+.data-table th,
+.data-table td {
     border: 1px solid #ddd;
     padding: 6px 10px;
     text-align: left;
     white-space: nowrap;
 }
 
+
 .data-table th {
     background-color: #eaeff5;
     position: sticky;
     top: 0;
 }
+
+
+/* ============================================================
+   PREPROCESSING INFO CARD
+============================================================ */
+
+.info-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-left: 4px solid #26466f;
+    padding: 15px 20px;
+    max-width: 750px;
+}
+
+
+.info-card ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+
+.info-card li {
+    margin-bottom: 8px;
+}
+
+
+/* ============================================================
+   FEATURE TAGS
+============================================================ */
+
+.feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    max-width: 1000px;
+}
+
+
+.feature-tag {
+    background-color: #e8eef5;
+    border: 1px solid #cbd6e2;
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   PROCESSING CARD
+============================================================ */
+
+.process-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 750px;
+}
+
+
+.process-step {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #eee;
+}
+
+
+.process-step:last-child {
+    border-bottom: none;
+}
+
+
+.process-step strong {
+    color: #26466f;
+}
+
+
+/* ============================================================
+   PREPROCESSING FLOW
+============================================================ */
+
+.preprocessing-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 15px;
+    margin-bottom: 40px;
+}
+
+
+.flow-step {
+    background-color: white;
+    border: 1px solid #cbd6e2;
+    border-left: 4px solid #26466f;
+    padding: 12px 18px;
+    border-radius: 4px;
+    min-width: 350px;
+}
+
+
+.arrow {
+    color: #26466f;
+    font-size: 22px;
+    padding: 3px 0;
+    margin-left: 165px;
+}
+
+
+/* ============================================================
+   CHARTS
+============================================================ */
 
 .chart-grid {
     display: flex;
@@ -141,6 +304,7 @@ body {
     margin-top: 10px;
 }
 
+
 .chart-card {
     background: white;
     border: 1px solid #ddd;
@@ -148,7 +312,57 @@ body {
     padding: 8px;
 }
 
+
 .chart-card img {
     max-width: 400px;
     display: block;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+
+    .content {
+        padding: 20px;
+    }
+
+
+    .process-step {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .layout {
+        flex-direction: column;
+    }
+
+
+    .sidebar {
+        width: 100%;
+    }
+
+
+    .flow-step {
+        min-width: auto;
+        width: 100%;
+    }
+
+
+    .arrow {
+        margin-left: 0;
+    }
+
 }

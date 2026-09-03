@@ -1,147 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <title>Placement Prediction Project</title>
 
 <link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
+      href="{{ url_for('static', filename='style.css') }}">
 
 </head>
+
 
 <body>
 
 <header class="topbar">
+
     <h1>Placement Prediction Project</h1>
+
 </header>
+
 
 <div class="layout">
 
-<nav class="sidebar">
 
-<ul>
+    <!-- Sidebar -->
 
-<li>
-<a href="{{ url_for('data_loading') }}"
-class="menu-item {% if active=='data-loading' %}active{% endif %}">
-Data Loading
-</a>
-</li>
+    <nav class="sidebar">
 
-<li>
-<a href="{{ url_for('eda_page') }}"
-class="menu-item {% if active=='eda' %}active{% endif %}">
-EDA
-</a>
-</li>
+        <ul>
 
-<li class="menu-item disabled">
-Preprocessing (Coming Soon)
-</li>
+            <li>
 
-<li class="menu-item disabled">
-Model Training (Coming Soon)
-</li>
+                <a href="{{ url_for('data_loading') }}"
+                   class="menu-item {% if active == 'data-loading' %}active{% endif %}">
 
-<li class="menu-item disabled">
-Prediction (Coming Soon)
-</li>
+                    Data Loading
 
-</ul>
+                </a>
 
-</nav>
+            </li>
 
-<main class="content">
 
-<h2>Exploratory Data Analysis</h2>
+            <li>
 
-{% if error %}
-<div class="error">
-{{ error }}
+                <a href="{{ url_for('eda_page') }}"
+                   class="menu-item {% if active == 'eda' %}active{% endif %}">
+
+                    EDA
+
+                </a>
+
+            </li>
+
+
+            <li class="menu-item disabled">
+
+                Preprocessing (Coming Soon)
+
+            </li>
+
+
+            <li class="menu-item disabled">
+
+                Model Training (Coming Soon)
+
+            </li>
+
+
+            <li class="menu-item disabled">
+
+                Prediction (Coming Soon)
+
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- Main Content -->
+
+    <main class="content">
+
+        <h2>Exploratory Data Analysis</h2>
+
+
+        <!-- Error Message -->
+
+        {% if error %}
+
+        <div class="error">
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- Results -->
+
+        {% if results %}
+
+
+        <!-- Dataset Information -->
+
+        <h3>Dataset Information</h3>
+
+        <table class="summary-table">
+
+            <tr>
+
+                <td>Rows</td>
+
+                <td>{{ results.n_rows }}</td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>Columns</td>
+
+                <td>{{ results.n_cols }}</td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>Duplicate Rows</td>
+
+                <td>{{ results.duplicate_count }}</td>
+
+            </tr>
+
+        </table>
+
+
+
+        <!-- Missing Values -->
+
+        <h3>Missing Values</h3>
+
+
+        {% if results.missing %}
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Column</th>
+
+                    <th>Missing Values</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for column, count in results.missing.items() %}
+
+                <tr>
+
+                    <td>{{ column }}</td>
+
+                    <td>{{ count }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <p>No Missing Values Found.</p>
+
+        {% endif %}
+
+
+
+        <!-- Placement Status -->
+
+        <h3>Placement Status Distribution</h3>
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Placement Status</th>
+
+                    <th>Count</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for status, count in results.target_counts.items() %}
+
+                <tr>
+
+                    <td>{{ status }}</td>
+
+                    <td>{{ count }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+
+        <!-- Generated Charts -->
+
+        <h3>Generated Charts</h3>
+
+
+        {% if results.charts %}
+
+        <div class="chart-grid">
+
+
+            {% for chart in results.charts %}
+
+            <div class="chart-card">
+
+                <h4>{{ chart }}</h4>
+
+
+                <img
+                    src="{{ url_for('static', filename='charts/' + chart) }}"
+                    alt="{{ chart }}"
+                    style="width:100%; height:auto;"
+                >
+
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+        <p>No charts were generated.</p>
+
+        {% endif %}
+
+
+
+        {% else %}
+
+
+        <!-- No Results -->
+
+        {% if not error %}
+
+        <p>
+
+            EDA results are not available yet.
+
+        </p>
+
+        {% endif %}
+
+
+        {% endif %}
+
+
+    </main>
+
+
 </div>
-{% endif %}
 
-{% if results %}
-
-<h3>Dataset Information</h3>
-
-<table class="summary-table">
-
-<tr>
-<td>Rows</td>
-<td>{{ results.shape[0] }}</td>
-</tr>
-
-<tr>
-<td>Columns</td>
-<td>{{ results.shape[1] }}</td>
-</tr>
-
-<tr>
-<td>Duplicate Rows</td>
-<td>{{ results.duplicates }}</td>
-</tr>
-
-</table>
-
-<h3>Missing Values</h3>
-
-{% if results.missing %}
-
-<table class="data-table">
-
-<tr>
-
-<th>Column</th>
-<th>Missing Values</th>
-
-</tr>
-
-{% for row in results.missing %}
-
-<tr>
-
-<td>{{ row["Column"] }}</td>
-
-<td>{{ row["Missing Values"] }}</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
-{% else %}
-
-<p>No Missing Values Found.</p>
-
-{% endif %}
-
-<h3>Generated Charts</h3>
-
-<div class="chart-grid">
-
-{% for chart in results.charts %}
-
-<div class="chart-card">
-
-<h4>{{ chart }}</h4>
-
-<img
-src="{{ url_for('static', filename='charts/' + chart) }}"
-style="width:100%;">
-
-</div>
-
-{% endfor %}
-
-</div>
-
-{% endif %}
-
-</main>
-
-</div>
 
 </body>
 

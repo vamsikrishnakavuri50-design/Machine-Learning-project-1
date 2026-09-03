@@ -1,96 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Placement Prediction Project</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta charset="UTF-8">
+
+    <title>Placement Prediction Project</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
+
 <body>
 
+
+<!-- ============================================================
+     TOP BAR
+============================================================ -->
+
 <header class="topbar">
+
     <h1>Placement Prediction Project</h1>
+
 </header>
 
+
 <div class="layout">
-    <!-- Left panel -->
+
+
+    <!-- ========================================================
+         SIDEBAR
+    ========================================================= -->
+
     <nav class="sidebar">
+
         <ul>
+
+
+            <!-- DATA LOADING -->
+
             <li>
+
                 <a href="{{ url_for('data_loading') }}"
-                   class="menu-item {% if active == 'data-loading' %}active{% endif %}">
+                   class="menu-item
+                   {% if active == 'data-loading' %}active{% endif %}">
+
                     Data Loading
+
                 </a>
+
             </li>
-            <li class="menu-item disabled">Preprocessing (coming soon)</li>
-            <li class="menu-item disabled">Model Training (coming soon)</li>
-            <li class="menu-item disabled">Prediction (coming soon)</li>
+
+
+            <!-- EDA -->
+
+            <li>
+
+                <a href="{{ url_for('eda_page') }}"
+                   class="menu-item
+                   {% if active == 'eda' %}active{% endif %}">
+
+                    EDA
+
+                </a>
+
+            </li>
+
+
+            <!-- PREPROCESSING -->
+
+            <li>
+
+                <a href="{{ url_for('preprocessing_page') }}"
+                   class="menu-item
+                   {% if active == 'preprocessing' %}active{% endif %}">
+
+                    Preprocessing
+
+                </a>
+
+            </li>
+
+
+            <!-- MODEL TRAINING -->
+
+            <li>
+
+                <a href="#"
+                   class="menu-item disabled">
+
+                    Model Training (Coming Soon)
+
+                </a>
+
+            </li>
+
+
+            <!-- PREDICTION -->
+
+            <li>
+
+                <a href="#"
+                   class="menu-item disabled">
+
+                    Prediction (Coming Soon)
+
+                </a>
+
+            </li>
+
+
         </ul>
+
     </nav>
 
-    <!-- Main content -->
+
+
+    <!-- ========================================================
+         MAIN CONTENT
+    ========================================================= -->
+
     <main class="content">
 
+
+        <!-- ====================================================
+             HOME PAGE
+        ===================================================== -->
+
         {% if active == 'none' %}
-            <p>Select an option from the left panel to get started.</p>
+
+            <h2>Placement Prediction Project</h2>
+
+            <p>
+                Select an option from the left panel
+                to get started.
+            </p>
+
         {% endif %}
+
+
+
+        <!-- ====================================================
+             DATA LOADING PAGE
+        ===================================================== -->
 
         {% if active == 'data-loading' %}
+
+
             <h2>Data Loading</h2>
 
+
             {% if error %}
-                <div class="error">{{ error }}</div>
+
+                <div class="error">
+
+                    {{ error }}
+
+                </div>
+
             {% endif %}
+
 
             {% if summary %}
+
+
+                <!-- DATASET SUMMARY -->
+
+                <h3>Dataset Summary</h3>
+
+
                 <table class="summary-table">
-                    <tr><td>Rows</td><td>{{ summary.n_rows }}</td></tr>
-                    <tr><td>Columns</td><td>{{ summary.n_cols }}</td></tr>
+
+                    <tr>
+
+                        <td>
+                            <strong>Rows</strong>
+                        </td>
+
+                        <td>
+                            {{ summary.n_rows }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>Columns</strong>
+                        </td>
+
+                        <td>
+                            {{ summary.n_cols }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>Duplicate Rows</strong>
+                        </td>
+
+                        <td>
+                            {{ summary.duplicates }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>Memory Usage</strong>
+                        </td>
+
+                        <td>
+                            {{ summary.memory_usage }} KB
+                        </td>
+
+                    </tr>
+
                 </table>
 
-                <h3>Column Info</h3>
+
+
+                <!-- COLUMN INFORMATION -->
+
+                <h3>Column Information</h3>
+
+
                 <div class="table-wrapper">
+
                     <table class="data-table">
+
                         <thead>
-                            <tr><th>Column</th><th>Dtype</th><th>Missing Values</th></tr>
-                        </thead>
-                        <tbody>
-                        {% for col in summary.columns %}
+
                             <tr>
-                                <td>{{ col }}</td>
-                                <td>{{ summary.dtypes[col] }}</td>
-                                <td>{{ summary.missing_counts[col] }}</td>
+
+                                <th>Column</th>
+
+                                <th>Data Type</th>
+
+                                <th>Missing Values</th>
+
                             </tr>
-                        {% endfor %}
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for col in summary.columns %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ col }}
+                                    </td>
+
+                                    <td>
+                                        {{ summary.dtypes[col] }}
+                                    </td>
+
+                                    <td>
+                                        {{ summary.missing_counts[col] }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
                         </tbody>
+
                     </table>
+
                 </div>
 
-                <h3>Preview (first 10 rows)</h3>
+
+
+                <!-- MISSING VALUE PERCENTAGE -->
+
+                <h3>Missing Value Percentage</h3>
+
+
                 <div class="table-wrapper">
+
                     <table class="data-table">
+
                         <thead>
+
                             <tr>
-                            {% for col in summary.columns %}
-                                <th>{{ col }}</th>
-                            {% endfor %}
+
+                                <th>Column</th>
+
+                                <th>Missing Count</th>
+
+                                <th>Missing Percentage</th>
+
                             </tr>
+
                         </thead>
+
+
                         <tbody>
-                        {% for row in summary.preview %}
-                            <tr>
+
                             {% for col in summary.columns %}
-                                <td>{{ row[col] }}</td>
+
+                                <tr>
+
+                                    <td>
+                                        {{ col }}
+                                    </td>
+
+                                    <td>
+                                        {{ summary.missing_counts[col] }}
+                                    </td>
+
+                                    <td>
+                                        {{ summary.missing_percent[col] }}%
+                                    </td>
+
+                                </tr>
+
                             {% endfor %}
-                            </tr>
-                        {% endfor %}
+
                         </tbody>
+
                     </table>
+
                 </div>
+
+
+
+                <!-- DATA PREVIEW -->
+
+                <h3>Preview (First 10 Rows)</h3>
+
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                {% for col in summary.columns %}
+
+                                    <th>
+                                        {{ col }}
+                                    </th>
+
+                                {% endfor %}
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for row in summary.preview %}
+
+                                <tr>
+
+                                    {% for col in summary.columns %}
+
+                                        <td>
+                                            {{ row[col] }}
+                                        </td>
+
+                                    {% endfor %}
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <!-- NUMERICAL STATISTICS -->
+
+                <h3>Numerical Statistics</h3>
+
+
+                <div class="table-wrapper">
+
+                    {{ summary.numeric_summary|safe }}
+
+                </div>
+
+
+
+                <!-- CATEGORICAL STATISTICS -->
+
+                <h3>Categorical Statistics</h3>
+
+
+                <div class="table-wrapper">
+
+                    {{ summary.categorical_summary|safe }}
+
+                </div>
+
+
             {% endif %}
+
+
         {% endif %}
 
+
     </main>
+
+
 </div>
 
+
 </body>
+
 </html>

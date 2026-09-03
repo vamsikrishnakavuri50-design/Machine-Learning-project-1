@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Placement Prediction Project</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     TOP BAR
+============================================================ -->
+
+<header class="topbar">
+
+    <h1>Placement Prediction Project</h1>
+
+</header>
+
+
+<div class="layout">
+
+
+    <!-- ========================================================
+         SIDEBAR
+    ========================================================= -->
+
+    <nav class="sidebar">
+
+        <ul>
+
+
+            <!-- DATA LOADING -->
+
+            <li>
+
+                <a href="{{ url_for('data_loading') }}"
+                   class="menu-item">
+
+                    Data Loading
+
+                </a>
+
+            </li>
+
+
+            <!-- EDA -->
+
+            <li>
+
+                <a href="{{ url_for('eda_page') }}"
+                   class="menu-item">
+
+                    EDA
+
+                </a>
+
+            </li>
+
+
+            <!-- PREPROCESSING -->
+
+            <li>
+
+                <a href="{{ url_for('preprocessing_page') }}"
+                   class="menu-item active">
+
+                    Preprocessing
+
+                </a>
+
+            </li>
+
+
+            <!-- MODEL TRAINING -->
+
+            <li>
+
+                <a href="#"
+                   class="menu-item disabled">
+
+                    Model Training (Coming Soon)
+
+                </a>
+
+            </li>
+
+
+            <!-- PREDICTION -->
+
+            <li>
+
+                <a href="#"
+                   class="menu-item disabled">
+
+                    Prediction (Coming Soon)
+
+                </a>
+
+            </li>
+
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- ========================================================
+         MAIN CONTENT
+    ========================================================= -->
+
+    <main class="content">
+
+
+        <h2>Data Preprocessing</h2>
+
+
+        <p class="section-description">
+
+            Preprocessing techniques used before
+            machine learning model training.
+
+        </p>
+
+
+        <!-- ERROR -->
+
+        {% if error %}
+
+            <div class="error">
+
+                {{ error }}
+
+            </div>
+
+        {% endif %}
+
+
+
+        {% if preprocessing %}
+
+
+        <!-- ====================================================
+             DATASET INFORMATION
+        ===================================================== -->
+
+        <h3>Dataset Information</h3>
+
+
+        <table class="summary-table">
+
+            <tr>
+
+                <td>
+                    <strong>Original Rows</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.original_rows }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Original Columns</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.original_columns }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Target Variable</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.target }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Input Features</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.feature_count }}
+                </td>
+
+            </tr>
+
+        </table>
+
+
+
+        <!-- ====================================================
+             REMOVED COLUMNS
+        ===================================================== -->
+
+        <h3>Columns Not Used as Input Features</h3>
+
+
+        <div class="info-card">
+
+            <ul>
+
+                {% for column in preprocessing.removed_columns %}
+
+                    <li>
+                        <strong>{{ column }}</strong>
+
+                        {% if column == "StudentID" %}
+                            — Identifier
+                        {% elif column == "Salary Package" %}
+                            — Outcome-related information
+                        {% elif column == "IsAnomaly" %}
+                            — Removed to avoid possible data leakage
+                        {% endif %}
+
+                    </li>
+
+                {% endfor %}
+
+                <li>
+                    <strong>{{ preprocessing.target }}</strong>
+                    — Target variable, not an input feature
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             NUMERICAL FEATURES
+        ===================================================== -->
+
+        <h3>
+            Numerical Features
+            ({{ preprocessing.num_numerical }})
+        </h3>
+
+
+        <div class="feature-list">
+
+            {% for feature in preprocessing.numerical_features %}
+
+                <span class="feature-tag">
+
+                    {{ feature }}
+
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- ====================================================
+             CATEGORICAL FEATURES
+        ===================================================== -->
+
+        <h3>
+            Categorical Features
+            ({{ preprocessing.num_categorical }})
+        </h3>
+
+
+        <div class="feature-list">
+
+            {% for feature in preprocessing.categorical_features %}
+
+                <span class="feature-tag">
+
+                    {{ feature }}
+
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- ====================================================
+             NUMERICAL PREPROCESSING
+        ===================================================== -->
+
+        <h3>Numerical Data Processing</h3>
+
+
+        <div class="process-card">
+
+
+            <div class="process-step">
+
+                <strong>Missing Values</strong>
+
+                <span>
+                    {{ preprocessing.missing_numerical }}
+                </span>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <strong>Feature Scaling</strong>
+
+                <span>
+                    {{ preprocessing.numerical_scaling }}
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ====================================================
+             CATEGORICAL PREPROCESSING
+        ===================================================== -->
+
+        <h3>Categorical Data Processing</h3>
+
+
+        <div class="process-card">
+
+
+            <div class="process-step">
+
+                <strong>Missing Values</strong>
+
+                <span>
+                    {{ preprocessing.missing_categorical }}
+                </span>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <strong>Encoding</strong>
+
+                <span>
+                    {{ preprocessing.categorical_encoding }}
+                </span>
+
+            </div>
+
+
+            <div class="process-step">
+
+                <strong>Unknown Categories</strong>
+
+                <span>
+                    {{ preprocessing.unknown_categories }}
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ====================================================
+             TRAIN TEST SPLIT
+        ===================================================== -->
+
+        <h3>Train-Test Split</h3>
+
+
+        <table class="summary-table">
+
+
+            <tr>
+
+                <td>
+                    <strong>Training Samples</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.train_samples }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Testing Samples</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.test_samples }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Split</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.split }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <strong>Random State</strong>
+                </td>
+
+                <td>
+                    {{ preprocessing.random_state }}
+                </td>
+
+            </tr>
+
+
+        </table>
+
+
+
+        <!-- ====================================================
+             PREPROCESSING FLOW
+        ===================================================== -->
+
+        <h3>Preprocessing Flow</h3>
+
+
+        <div class="preprocessing-flow">
+
+
+            <div class="flow-step">
+
+                Raw Dataset
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="flow-step">
+
+                Remove Unused Columns
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="flow-step">
+
+                Separate Numerical & Categorical Features
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="flow-step">
+
+                Missing Value Imputation
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="flow-step">
+
+                StandardScaler + OneHotEncoder
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="flow-step">
+
+                Train-Test Split
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="flow-step">
+
+                Model Training
+
+            </div>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
